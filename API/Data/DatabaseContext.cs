@@ -33,4 +33,13 @@ namespace API.Data
 
         public bool FamilyFriendly { get; set; }
     }
+
+    public class Hotel
+    {
+        public string Name { get; set; }
+
+        public int StarRating { get; set; }
+
+        public string ResortCode { get; set; }
+    }
 }

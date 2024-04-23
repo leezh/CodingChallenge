@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using API.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
@@ -9,24 +10,31 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var HTTP = new HttpClient();
+            var hotelSource = new HotelApiSource();
+            var residenzaSource = new ResidenzaApiSource();
 
-            var http_response = await HTTP.GetAsync("https://skizoominterviewchallenge.azurewebsites.net/api/hotels?code=7hnVjCOrnMYAA49pAy/sBnxf4OZZpv8j8fwQ4B8tSNyowaN4cfaKYQ==");
+            var tasks = new List<Task<List<Hotel>>>
+            {
+                hotelSource.GetHotels(),
+                residenzaSource.GetHotels()
+            };
 
-            var content = await http_response.Content.ReadAsStringAsync();
+            await Task.WhenAll(tasks.ToArray());
 
-            return new OkObjectResult(content);
+            var result = new List<Hotel>();
+            foreach (var task in tasks) {
+                result.AddRange(task.Result);
+            }
+
+            return new OkObjectResult(result);
         }
 
         [HttpGet]
         [Route("italian")]
         public async Task<IActionResult> GetNewProviderHotels()
         {
-            var HTTP = new HttpClient();
-
-            var data_response = await HTTP.GetAsync("https://skizoominterviewchallenge.azurewebsites.net/api/residenza?code=En1OvN8w29jYh0BYv5ogeN2JVZt_zB8PZqTtpRK_PvB9AzFuTk3FYQ==");
-
-            var content = await data_response.Content.ReadAsStringAsync();
+            var residenzaSource = new ResidenzaApiSource();
+            var content = await residenzaSource.GetHotels();
 
             return new OkObjectResult(content);
         }
