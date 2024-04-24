@@ -1,4 +1,4 @@
-﻿using API.Data;
+using API.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -30,8 +30,11 @@ namespace API.Controllers
         [Route("italian")]
         public async Task<IActionResult> GetNewProviderHotels()
         {
-            var residenzaSource = new ResidenzaApiSource();
-            var content = await residenzaSource.GetHotels();
+            var HTTP = new HttpClient();
+
+            var data_response = await HTTP.GetAsync("https://skizoominterviewchallenge.azurewebsites.net/api/residenza?code=En1OvN8w29jYh0BYv5ogeN2JVZt_zB8PZqTtpRK_PvB9AzFuTk3FYQ==");
+
+            var content = await data_response.Content.ReadAsStringAsync();
 
             return new OkObjectResult(content);
         }
