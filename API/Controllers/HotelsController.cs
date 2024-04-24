@@ -10,15 +10,12 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var hotelSource = new HotelApiSource();
-            var residenzaSource = new ResidenzaApiSource();
-
-            var tasks = new List<Task<List<Hotel>>>
+            var sources = new List<IHotelSource>
             {
-                hotelSource.GetHotels(),
-                residenzaSource.GetHotels()
+                new HotelApiSource(),
+                new ResidenzaApiSource(),
             };
-
+            var tasks = sources.Select(t => t.GetHotels());
             await Task.WhenAll(tasks.ToArray());
 
             var result = new List<Hotel>();
