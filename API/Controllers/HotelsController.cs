@@ -16,6 +16,8 @@ namespace API.Controllers
         /// </summary>
         /// <returns>List of hotels</returns>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<Hotel>>> Get()
         {
             var sources = new List<IHotelSource>

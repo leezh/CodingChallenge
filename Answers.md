@@ -23,6 +23,15 @@ caching for the sources.
 
 ## 3. If you added any tests to the code, which approach did you use and why?
 
+Considering there was already an xunit test framework project already I
+decided to extend it and actually test that `HotelsController.Get()` returns
+the correct result.
+
+Further tests could be added mocking upstream sources being down, and a cursory
+look at mocking libraries such as https://github.com/richardszalay/mockhttp
+could be used but would only be necessary once graceful error handling while
+fetching data is implemented.
+
 ## 4. How would you add any new data sources to the `/api/hotels/` endpoint in the future?
 
 New sources could be added by deriving from `IHotelSource` and implementing the
@@ -43,9 +52,11 @@ may be required.
 
 ## 6. If you have clients using the current version of the API, how would you approach this refactoring task?
 
-While some level of backwards compatibility was preserved for `/api/italian/`,
-the changes to `/api/hotels/` overhauls the output the schema and ought to be
-placed in a versioned path like `/api/v2/hotels/`.
+I approached this by trying to ensure `/api/Hotels/` maintains the same output
+schema. However, not all data is present in the `Residenza` source so some
+fields were made `null` and may result in unexpected behaviour with clients. In
+such case it would be worth placing the refactored code in a versioned path like
+`/api/v2/Hotels/` instead.
 
 ## 7. If you had to host this API in a production envirnment, describe the steps you would take to do this
 
