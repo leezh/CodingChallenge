@@ -41,5 +41,13 @@ namespace API.Data
         public int StarRating { get; set; }
 
         public string ResortCode { get; set; }
+
+        public string PartitionKey { get; set; }
+
+        public string RowKey { get; set; }
+
+        public string Timestamp { get; set; }
+
+        public string ETag { get; set; }
     }
 }
